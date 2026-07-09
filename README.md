@@ -42,6 +42,3 @@ Built as a full-stack AI product: prompt engineering, database security, cost-aw
 
 ## Screenshots
 (Add screenshots here later)
-
-## Screenshots
-*(Add screenshots here)*
