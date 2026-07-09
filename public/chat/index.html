@@ -248,9 +248,10 @@
                     </tbody></table></div>`;
 
                 // Only draw a chart if there are exactly 2 columns: one label, one number
-                const numericCol = columns.find(c => !isNaN(parseFloat(resultRows[0][c])));
+                const numericCol = columns.find(c => 
+    !isNaN(resultRows[0][c]) && resultRows[0][c] !== '' && resultRows[0][c] !== null
+);
                 const labelCol = columns.find(c => c !== numericCol);
-
                 if (columns.length === 2 && resultRows.length > 1) {
     chartCounter++;
     chartId = 'chart-' + chartCounter;
@@ -276,11 +277,15 @@
             // Actually draw the chart now that the canvas exists on the page
             if (chartId && resultRows) {
                 const columns = Object.keys(resultRows[0]);
-                const numericCol = columns.find(c => !isNaN(parseFloat(resultRows[0][c])));
+               const numericCol = columns.find(c => 
+    !isNaN(resultRows[0][c]) && resultRows[0][c] !== '' && resultRows[0][c] !== null
+);
                 const labelCol = columns.find(c => c !== numericCol);
 
                 // Figure out the best chart type based on the data shape
-const numericCols = columns.filter(c => !isNaN(parseFloat(resultRows[0][c])));
+const numericCols = columns.filter(c => 
+    !isNaN(resultRows[0][c]) && resultRows[0][c] !== '' && resultRows[0][c] !== null
+);
 const dateLikeCol = columns.find(c => /date|month|year|time/i.test(c));
 
 let chartType = requestedChartType || 'bar';
