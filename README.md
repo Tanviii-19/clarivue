@@ -1,44 +1,62 @@
-# Clarivue — AI-Powered Data Analytics Copilot
+# Clarivue
 
-Clarivue turns plain-English questions into safe, optimized SQL queries — no SQL knowledge required. Upload a spreadsheet, ask a question, and get an accurate answer backed by real data: chart, table, and explanation included.
+An AI-powered data analytics tool. Upload an Excel or CSV file, ask questions about it in plain English, and get back an answer with a chart and a table — no SQL needed.
 
-Built as a full-stack AI product: prompt engineering, database security, cost-aware LLM orchestration, and a polished frontend — not just a wrapper around an API call.
+**Live:** https://clarivue-cyr6.onrender.com
 
-## Key Engineering Decisions
+## Why I built this
 
-- **Security-first AI execution** — the AI is architecturally restricted to read-only `SELECT` queries. Even a maliciously-phrased question cannot trigger a `DELETE`, `DROP`, or `UPDATE` against the database.
-- **Self-healing query generation** — if the AI's first SQL attempt fails, the system automatically feeds the error back to the model, regenerates a corrected query, and retries — reducing user-facing failures without manual intervention.
-- **Cost-aware, conditional AI routing** — simple lookups run a single lightweight query. Deeper diagnostic questions ("why did X happen?") only trigger a more expensive multi-angle root-cause investigation when explicitly warranted — avoiding unnecessary LLM calls on routine requests.
-- **Automatic dataset summarization** — large result sets are automatically condensed (top/bottom-N sampling) before being sent to the LLM, controlling token cost and latency as datasets scale.
-- **Conversational memory** — follow-up queries ("now show the lowest instead") are resolved using prior query context, without requiring the user to repeat themselves.
-- **Dynamic schema handling** — uploaded files are automatically profiled and converted into properly-typed database tables at runtime, with no hardcoded schema assumptions.
+I wanted to understand how a full AI product actually gets built — not just calling an API, but handling the real problems that come with it: making sure the AI can't accidentally run a destructive database query, keeping costs down when questions get complex, and dealing with things like duplicate uploads and broken SQL.
 
-## Features
+## What it does
 
-- Upload Excel/CSV → automatic table creation and ingestion
-- Natural language → SQL → real-time execution → plain-English explanation
-- Automatic chart + table generation per query
-- Conditional root-cause analysis for diagnostic ("why") questions
-- Persistent, clearable question history
-- Read-only database access guarantee
+- Upload a CSV/Excel file → it automatically creates a database table from it
+- Ask a question like "which region had the highest sales?" → it writes the SQL, runs it, and explains the answer in plain English
+- Automatically picks a chart type based on the data (bar, line, or scatter)
+- Understands follow-up questions like "now show the lowest instead"
+- If you ask "why" something happened, it digs a bit deeper — checking region, product, and time period before answering, and it says "not enough data" instead of making something up when that's genuinely true
+- Keeps a history of past questions, which you can clear
+- The AI can only read data, never modify or delete it — this is enforced in code, not just something I asked it nicely to do
 
-## Tech Stack
+## How it works
 
-| Layer | Technology |
-|---|---|
-| Backend | Node.js, Express |
-| Database | MySQL |
-| AI / LLM | Google Gemini API |
-| Frontend | HTML, Tailwind CSS, Chart.js |
-| Architecture | RESTful API, server-rendered static frontend |
+```
+Browser (HTML + Tailwind + Chart.js)
+        |
+        v
+Backend (Node.js + Express)
+   - checks the uploaded file, builds the table
+   - sends the question + schema to Gemini
+   - validates the SQL is read-only before running it
+   - runs it on MySQL
+   - sends the result back to Gemini for a plain-English explanation
+        |
+        v
+MySQL database (hosted on Aiven)
+```
 
-## Getting Started
+## Tech stack
+
+- **Backend:** Node.js, Express
+- **Database:** MySQL (Aiven, cloud-hosted)
+- **AI:** Google Gemini API
+- **Frontend:** HTML, Tailwind CSS, Chart.js
+- **Deployment:** Render (auto-deploys from this repo)
+
+## Running it locally
 
 1. Clone this repo
 2. `npm install`
-3. Copy `.env.example` to `.env` and fill in your MySQL credentials + Gemini API key
+3. Copy `.env.example` to `.env`, fill in your MySQL credentials and Gemini API key
 4. `npm start`
-5. Open `http://localhost:5000`
+5. Go to `http://localhost:5000`
+
+## Things I'd still like to add
+
+- Letting users delete a dataset from the UI instead of MySQL directly
+- Basic login, so different people's uploads don't all mix together
+- Live progress updates instead of a single "thinking..." state
 
 ## Screenshots
-(Add screenshots here later)
+
+*(add screenshots here)*
