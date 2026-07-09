@@ -1,0 +1,346 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Clarivue - Data Copilot</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#ffffff",
+                    "inverse-surface": "#2d3133",
+                    "inverse-primary": "#cebdff",
+                    "on-secondary-fixed": "#3d0026",
+                    "surface-dim": "#d8dadc",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#ffd8e7",
+                    "primary-fixed": "#e8ddff",
+                    "outline-variant": "#cac4d4",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e6e8ea",
+                    "primary-fixed-dim": "#cebdff",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "on-secondary-container": "#76014e",
+                    "on-secondary-fixed-variant": "#85145a",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-container": "#eceef0",
+                    "on-error": "#ffffff",
+                    "on-surface": "#191c1e",
+                    "on-tertiary-container": "#160bae",
+                    "tertiary-fixed-dim": "#c0c1ff",
+                    "on-tertiary-fixed": "#07006c",
+                    "on-background": "#191c1e",
+                    "on-surface-variant": "#494552",
+                    "secondary-fixed-dim": "#ffafd3",
+                    "on-primary-container": "#3c1989",
+                    "background": "#f7f9fb",
+                    "on-tertiary-fixed-variant": "#2f2ebe",
+                    "primary": "#674bb5",
+                    "tertiary": "#494bd6",
+                    "secondary": "#a43073",
+                    "outline": "#7a7583",
+                    "secondary-container": "#fc79bd",
+                    "on-primary-fixed": "#21005e",
+                    "tertiary-fixed": "#e1e0ff",
+                    "surface": "#f7f9fb",
+                    "tertiary-container": "#8f92ff",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-tint": "#674bb5",
+                    "primary-container": "#a78bfa",
+                    "on-primary-fixed-variant": "#4f319c",
+                    "error-container": "#ffdad6",
+                    "surface-bright": "#f7f9fb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "16px",
+                    "2xl": "20px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "gutter": "20px",
+                    "xl": "40px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "base": "4px",
+                    "xs": "4px",
+                    "container-padding": "32px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-lg": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
+            border-left: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #674bb5 0%, #a43073 100%);
+        }
+        .primary-gradient-text {
+            background: linear-gradient(135deg, #674bb5 0%, #a43073 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .mesh-gradient {
+            background-color: #f7f9fb;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(206, 189, 255, 0.4) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(255, 216, 231, 0.4) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(143, 146, 255, 0.2) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(252, 121, 189, 0.2) 0px, transparent 50%);
+        }
+        .typing-dots span {
+            animation: blink 1.4s infinite both;
+        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes blink {
+            0% { opacity: 0.2; }
+            20% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(103, 75, 181, 0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(103, 75, 181, 0.2); }
+    </style>
+</head>
+<body class="mesh-gradient h-screen w-full flex flex-col font-body-md text-on-surface">
+<header class="h-20 shrink-0 flex items-center justify-between px-xl z-10">
+<div class="flex items-center gap-md">
+<h1 class="font-display-lg text-headline-md font-bold primary-gradient-text tracking-tight">Clarivue</h1>
+</div>
+<div class="glass-panel px-lg py-sm rounded-full flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="font-label-md text-on-surface-variant">Analyzing: <span class="font-bold text-on-surface" id="dataset-name">sales</span></span>
+<div class="w-2 h-2 bg-green-500 rounded-full animate-pulse ml-2"></div>
+</div>
+<div class="w-24"></div>
+</header>
+<main class="flex-1 overflow-hidden relative flex flex-col max-w-5xl mx-auto w-full px-lg">
+<div class="flex-1 overflow-y-auto pt-md pb-xl space-y-lg scroll-smooth" id="chat-container">
+<!-- Real messages will be added here dynamically -->
+</div>
+<div class="flex items-center gap-md px-lg py-2 hidden" id="status-indicator">
+<div class="flex items-center gap-sm">
+<div class="typing-dots flex gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+</div>
+<p class="text-label-md text-on-surface-variant font-medium transition-all duration-500" id="progress-text">Understanding question...</p>
+</div>
+</div>
+</main>
+<div class="shrink-0 pb-lg pt-md max-w-5xl mx-auto w-full px-lg">
+<div class="glass-panel p-md rounded-2xl flex items-end gap-md shadow-xl border-white/60">
+<div class="flex-1 min-h-[48px] max-h-32 overflow-y-auto px-md py-2.5">
+<textarea class="w-full bg-transparent border-none focus:ring-0 text-body-md placeholder:text-on-surface-variant/50 resize-none py-1" id="chat-input" placeholder="Ask anything about your data..." rows="1"></textarea>
+</div>
+<div class="flex items-center gap-sm pb-1">
+<button class="primary-gradient text-white h-11 w-11 rounded-xl flex items-center justify-center shadow-lg hover:shadow-primary/20 active:scale-95 transition-all" id="send-btn">
+<span class="material-symbols-outlined text-[24px]">send</span>
+</button>
+</div>
+</div>
+<p class="text-center text-[11px] text-on-surface-variant/40 mt-sm">Clarivue generates insights using AI — please verify important decisions against your original data.</p>
+</div>
+<div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+<div class="absolute top-[20%] right-[10%] w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] animate-pulse"></div>
+<div class="absolute bottom-[10%] left-[5%] w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px]" style="animation-delay: 2s;"></div>
+</div>
+<script>
+        // Which dataset are we analyzing? Read from URL like /chat?table=uploaded_test_data
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetTable = urlParams.get('table') || 'sales';
+        document.getElementById('dataset-name').textContent = targetTable;
+
+        const chatContainer = document.getElementById('chat-container');
+        const textarea = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        const statusIndicator = document.getElementById('status-indicator');
+        const progressText = document.getElementById('progress-text');
+
+        // Decorative cycling text, shown only while waiting for the real answer
+        const statusPhrases = ["Understanding question...", "Generating SQL...", "Executing query...", "Generating insights..."];
+        let phraseInterval = null;
+
+        function startStatusAnimation() {
+            let i = 0;
+            progressText.textContent = statusPhrases[0];
+            statusIndicator.classList.remove('hidden');
+            phraseInterval = setInterval(() => {
+                i = (i + 1) % statusPhrases.length;
+                progressText.textContent = statusPhrases[i];
+            }, 1200);
+        }
+
+        function stopStatusAnimation() {
+            clearInterval(phraseInterval);
+            statusIndicator.classList.add('hidden');
+        }
+
+        function addUserMessage(text) {
+            const div = document.createElement('div');
+            div.className = "flex justify-end w-full";
+            div.innerHTML = `<div class="max-w-[70%] primary-gradient text-white px-lg py-md rounded-2xl rounded-tr-none shadow-lg"><p class="font-body-md">${text}</p></div>`;
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        let chartCounter = 0;
+
+        function addAIMessage(explanation, resultRows, isError) {
+            const div = document.createElement('div');
+            div.className = "flex justify-start w-full";
+
+            let tableHTML = '';
+            let chartHTML = '';
+            let chartId = null;
+
+            if (resultRows && resultRows.length > 0) {
+                function prettifyColumnName(col) {
+                    return col
+                        .replace(/SUM\((.+)\)/i, 'Total $1')
+                        .replace(/AVG\((.+)\)/i, 'Average $1')
+                        .replace(/COUNT\((.+)\)/i, 'Count of $1')
+                        .replace(/_/g, ' ')
+                        .replace(/\b\w/g, c => c.toUpperCase());
+                }
+                const columns = Object.keys(resultRows[0]);
+                tableHTML = `<div class="overflow-hidden border border-white/30 rounded-xl mt-md">
+                    <table class="w-full text-left text-label-md">
+                    <thead class="bg-white/30"><tr>${columns.map(c => `<th class="px-md py-sm font-bold text-on-surface-variant">${prettifyColumnName(c)}</th>`).join('')}</tr></thead>
+                    <tbody class="divide-y divide-white/20">
+                    ${resultRows.map(row => `<tr>${columns.map(c => `<td class="px-md py-sm">${row[c]}</td>`).join('')}</tr>`).join('')}
+                    </tbody></table></div>`;
+
+                // Only draw a chart if there are exactly 2 columns: one label, one number
+                const numericCol = columns.find(c => !isNaN(parseFloat(resultRows[0][c])));
+                const labelCol = columns.find(c => c !== numericCol);
+
+                if (columns.length === 2 && numericCol && labelCol && resultRows.length > 1) {
+                    chartCounter++;
+                    chartId = 'chart-' + chartCounter;
+                    chartHTML = `<div class="mt-md bg-white/40 rounded-xl p-md" style="height: 250px;"><canvas id="${chartId}"></canvas></div>`;
+                }
+            }
+
+            const iconColor = isError ? 'text-error' : 'text-primary';
+            const label = isError ? 'Error' : 'Analysis Complete';
+
+            div.innerHTML = `<div class="max-w-[85%] glass-panel p-lg rounded-2xl rounded-tl-none space-y-md">
+                <div class="flex items-center gap-sm ${iconColor} mb-sm">
+                <span class="material-symbols-outlined text-[24px]">auto_awesome</span>
+                <span class="font-label-md font-bold uppercase tracking-wider">${label}</span>
+                </div>
+                <p class="text-on-surface font-body-md">${(explanation || '').replace(/\*\*/g, '')}</p>
+                ${chartHTML}
+                ${tableHTML}
+                </div>`;
+            chatContainer.appendChild(div);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // Actually draw the chart now that the canvas exists on the page
+            if (chartId && resultRows) {
+                const columns = Object.keys(resultRows[0]);
+                const numericCol = columns.find(c => !isNaN(parseFloat(resultRows[0][c])));
+                const labelCol = columns.find(c => c !== numericCol);
+
+                new Chart(document.getElementById(chartId), {
+                    type: 'bar',
+                    data: {
+                        labels: resultRows.map(r => r[labelCol]),
+                        datasets: [{
+                            label: numericCol,
+                            data: resultRows.map(r => parseFloat(r[numericCol])),
+                            backgroundColor: 'rgba(103, 75, 181, 0.6)',
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+        }
+
+        async function sendQuestion() {
+            const question = textarea.value.trim();
+            if (!question) return;
+
+            addUserMessage(question);
+            textarea.value = '';
+            textarea.style.height = 'auto';
+            startStatusAnimation();
+
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question, table: targetTable })
+                });
+                const data = await response.json();
+                stopStatusAnimation();
+
+                if (!response.ok) {
+                    addAIMessage(data.error || 'Something went wrong.', null, true);
+                    return;
+                }
+
+                if (data.type === 'root_cause_analysis') {
+                    addAIMessage(data.explanation, data.breakdown?.byRegion || null, false);
+                } else {
+                    addAIMessage(data.explanation, data.result, false);
+                }
+            } catch (err) {
+                stopStatusAnimation();
+                addAIMessage('Could not reach the server: ' + err.message, null, true);
+            }
+        }
+
+        sendBtn.addEventListener('click', sendQuestion);
+        textarea.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendQuestion();
+            }
+        });
+        textarea.addEventListener('input', () => {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        });
+    </script>
+</body></html>

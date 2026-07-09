@@ -1,0 +1,285 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Clarivue | Data Copilot</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-container": "#160bae",
+                    "on-primary-fixed-variant": "#4f319c",
+                    "primary-fixed": "#e8ddff",
+                    "on-background": "#191c1e",
+                    "tertiary-fixed": "#e1e0ff",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#2f2ebe",
+                    "primary-container": "#a78bfa",
+                    "primary-fixed-dim": "#cebdff",
+                    "secondary-container": "#fc79bd",
+                    "surface-container-high": "#e6e8ea",
+                    "on-primary-fixed": "#21005e",
+                    "error": "#ba1a1a",
+                    "background": "#f7f9fb",
+                    "tertiary-container": "#8f92ff",
+                    "tertiary-fixed-dim": "#c0c1ff",
+                    "on-surface": "#191c1e",
+                    "on-secondary-fixed-variant": "#85145a",
+                    "surface-container-low": "#f2f4f6",
+                    "error-container": "#ffdad6",
+                    "secondary": "#a43073",
+                    "on-secondary-fixed": "#3d0026",
+                    "surface-dim": "#d8dadc",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#76014e",
+                    "on-secondary": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#2d3133",
+                    "surface-variant": "#e0e3e5",
+                    "secondary-fixed": "#ffd8e7",
+                    "outline": "#7a7583",
+                    "inverse-primary": "#cebdff",
+                    "primary": "#674bb5",
+                    "surface-bright": "#f7f9fb",
+                    "surface": "#f7f9fb",
+                    "surface-container-highest": "#e0e3e5",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-error": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#07006c",
+                    "on-surface-variant": "#494552",
+                    "on-primary-container": "#3c1989",
+                    "tertiary": "#494bd6",
+                    "surface-container": "#eceef0",
+                    "surface-tint": "#674bb5",
+                    "secondary-fixed-dim": "#ffafd3",
+                    "outline-variant": "#cac4d4"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "2xl": "20px",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "4px",
+                    "xl": "40px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "container-padding": "32px",
+                    "md": "16px",
+                    "gutter": "20px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f7f9fb 0%, #fde7f3 50%, #e9d5ff 100%);
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-top: 1.5px solid rgba(255, 255, 255, 0.6);
+            border-left: 1.5px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        }
+        .bg-primary-gradient {
+            background: linear-gradient(135deg, #a78bfa 0%, #fc79bd 100%);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased overflow-x-hidden">
+<!-- Navigation Shell -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-lg h-16 bg-surface/60 backdrop-blur-xl border-b border-white/20 shadow-sm">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-headline-md font-bold text-primary bg-clip-text">Clarivue</span>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="pt-24 pb-16 px-container-padding max-w-7xl mx-auto space-y-xl">
+<!-- Hero Section -->
+<section class="text-center space-y-md py-md">
+<h1 class="font-display-lg text-display-lg md:text-[56px] leading-tight tracking-tight text-on-surface">
+                Analyze your <span class="text-primary">data</span> with ease
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+                Ask your data anything — no SQL needed. Clarivue transforms complex datasets into clear, actionable visual insights instantly.
+            </p>
+</section>
+<!-- Drag & Drop Glass Card -->
+<section class="relative">
+<!-- Decorative atmospheric elements -->
+<div class="absolute -top-12 -left-12 w-64 h-64 bg-primary/10 rounded-full blur-[80px]"></div>
+<div class="absolute -bottom-12 -right-12 w-64 h-64 bg-secondary/10 rounded-full blur-[80px]"></div>
+<div class="glass-panel rounded-2xl p-xl flex flex-col items-center justify-center border-dashed border-2 border-primary/30 min-h-[340px] transition-all hover:border-primary group cursor-pointer">
+<div class="w-20 h-20 bg-primary-container/20 rounded-full flex items-center justify-center mb-lg group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-primary text-[40px]">upload_file</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-sm">Upload your data</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Drag and drop CSV or Excel files here to begin analysis</p>
+<input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display: none;">
+<button id="browseBtn" class="bg-primary-gradient text-on-primary font-label-md text-label-md px-lg py-md rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-95 transition-all">
+                    Browse Files
+                </button>
+<p id="uploadStatus" class="font-body-sm text-on-surface-variant mt-md"></p>
+</div>
+</section>
+<!-- CTA Action -->
+<section class="flex flex-col items-center gap-md">
+<button onclick="window.location.href='/chat'" class="bg-primary-gradient text-white font-headline-md text-headline-md px-xl py-lg rounded-2xl flex items-center gap-md shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                Start Asking Questions
+            </button>
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">bolt</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">AI Copilot Online</span>
+</div>
+</section>
+<!-- Recent Datasets Bento Grid -->
+<section class="space-y-lg">
+<div class="flex justify-between items-end">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Recent Datasets</h2>
+<a class="text-primary font-label-md text-label-md hover:underline" href="#">View All</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg" id="datasets-grid">
+<p class="text-on-surface-variant">Loading datasets...</p>
+</div>
+</section>
+</main>
+
+<!-- Micro-interactions Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load real datasets from the backend and show them as clickable cards
+            fetch('/datasets')
+              .then(res => res.json())
+              .then(data => {
+                const grid = document.getElementById('datasets-grid');
+                if (!data.datasets || data.datasets.length === 0) {
+                  grid.innerHTML = '<p class="text-on-surface-variant col-span-3">No datasets yet — upload a file above to get started.</p>';
+                  return;
+                }
+                grid.innerHTML = data.datasets.map(name => `
+                  <div onclick="window.location.href='/chat?table=${name}'" class="glass-panel p-lg rounded-2xl flex flex-col gap-md hover:scale-[1.02] transition-transform cursor-pointer">
+                    <div class="flex justify-between items-start">
+                      <div class="p-sm bg-primary-container/20 rounded-lg">
+                        <span class="material-symbols-outlined text-primary">table_chart</span>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 class="font-label-md text-label-md font-bold text-on-surface">${name}</h4>
+                      <p class="font-label-sm text-label-sm text-on-surface-variant">Click to ask questions</p>
+                    </div>
+                  </div>
+                `).join('');
+              })
+              .catch(err => {
+                document.getElementById('datasets-grid').innerHTML = '<p class="text-error">Could not load datasets.</p>';
+              });
+            const dragZone = document.querySelector('.glass-panel.group');
+            const browseBtn = document.getElementById('browseBtn');
+            const fileInput = document.getElementById('fileInput');
+            const uploadStatus = document.getElementById('uploadStatus');
+
+            async function uploadFile(file) {
+                if (!file) return;
+                uploadStatus.textContent = 'Uploading ' + file.name + '...';
+                const formData = new FormData();
+                formData.append('file', file);
+                try {
+                    const response = await fetch('/upload', { method: 'POST', body: formData });
+                    const data = await response.json();
+                    if (response.ok) {
+                        uploadStatus.textContent = 'Success! Table created: ' + data.tableName;
+                    } else {
+                        uploadStatus.textContent = 'Error: ' + data.error;
+                    }
+                } catch (err) {
+                    uploadStatus.textContent = 'Upload failed: ' + err.message;
+                }
+            }
+
+            browseBtn.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', () => {
+                uploadFile(fileInput.files[0]);
+            });
+
+            dragZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dragZone.classList.add('border-primary');
+                dragZone.style.background = "rgba(255, 255, 255, 0.8)";
+            });
+
+            dragZone.addEventListener('dragleave', () => {
+                dragZone.style.background = "rgba(255, 255, 255, 0.6)";
+            });
+
+            dragZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dragZone.style.background = "rgba(255, 255, 255, 0.6)";
+                uploadFile(e.dataTransfer.files[0]);
+            });
+            
+            // Subtle parallax effect on floating decorations
+            window.addEventListener('mousemove', (e) => {
+                const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+                const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+                document.querySelectorAll('.blur-[80px]').forEach(el => {
+                    el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                });
+            });
+        });
+    </script>
+</body></html>
