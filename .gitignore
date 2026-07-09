@@ -1,3 +1,5 @@
 node_modules
 .env
 test_data.xlsx
+ca.pem
+clarivue_backup.sql
