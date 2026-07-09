@@ -222,7 +222,7 @@
 
         let chartCounter = 0;
 
-        function addAIMessage(explanation, resultRows, isError) {
+       function addAIMessage(explanation, resultRows, isError, requestedChartType) {
             const div = document.createElement('div');
             div.className = "flex justify-start w-full";
 
@@ -251,11 +251,11 @@
                 const numericCol = columns.find(c => !isNaN(parseFloat(resultRows[0][c])));
                 const labelCol = columns.find(c => c !== numericCol);
 
-                if (columns.length === 2 && numericCol && labelCol && resultRows.length > 1) {
-                    chartCounter++;
-                    chartId = 'chart-' + chartCounter;
-                    chartHTML = `<div class="mt-md bg-white/40 rounded-xl p-md" style="height: 250px;"><canvas id="${chartId}"></canvas></div>`;
-                }
+                if (columns.length === 2 && resultRows.length > 1) {
+    chartCounter++;
+    chartId = 'chart-' + chartCounter;
+    chartHTML = `<div class="mt-md bg-white/40 rounded-xl p-md" style="height: 250px;"><canvas id="${chartId}"></canvas></div>`;
+}
             }
 
             const iconColor = isError ? 'text-error' : 'text-primary';
@@ -279,23 +279,87 @@
                 const numericCol = columns.find(c => !isNaN(parseFloat(resultRows[0][c])));
                 const labelCol = columns.find(c => c !== numericCol);
 
-                new Chart(document.getElementById(chartId), {
-                    type: 'bar',
-                    data: {
-                        labels: resultRows.map(r => r[labelCol]),
-                        datasets: [{
-                            label: numericCol,
-                            data: resultRows.map(r => parseFloat(r[numericCol])),
-                            backgroundColor: 'rgba(103, 75, 181, 0.6)',
-                            borderRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } }
-                    }
-                });
+                // Figure out the best chart type based on the data shape
+const numericCols = columns.filter(c => !isNaN(parseFloat(resultRows[0][c])));
+const dateLikeCol = columns.find(c => /date|month|year|time/i.test(c));
+
+let chartType = requestedChartType || 'bar';
+let chartData;
+
+if (requestedChartType === 'scatter' && numericCols.length === 2) {
+    chartType = 'scatter';
+    chartData = {
+        datasets: [{
+            label: `${numericCols[1]} vs ${numericCols[0]}`,
+            data: resultRows.map(r => ({
+                x: parseFloat(r[numericCols[0]]),
+                y: parseFloat(r[numericCols[1]])
+            })),
+            backgroundColor: 'rgba(103, 75, 181, 0.6)'
+        }]
+    };
+} else if (requestedChartType === 'line' || requestedChartType === 'bar' || requestedChartType === 'pie') {
+    chartType = requestedChartType;
+    chartData = {
+        labels: resultRows.map(r => r[dateLikeCol || labelCol]),
+        datasets: [{
+            label: numericCol,
+            data: resultRows.map(r => parseFloat(r[numericCol])),
+            backgroundColor: chartType === 'line' ? 'rgba(103, 75, 181, 0.2)' : 'rgba(103, 75, 181, 0.6)',
+            borderColor: 'rgba(103, 75, 181, 1)',
+            borderRadius: chartType === 'bar' ? 8 : undefined,
+            tension: chartType === 'line' ? 0.3 : undefined,
+            fill: chartType === 'line'
+        }]
+    };
+} else if (numericCols.length === 2) {
+    chartType = 'scatter';
+    chartData = {
+        datasets: [{
+            label: `${numericCols[1]} vs ${numericCols[0]}`,
+            data: resultRows.map(r => ({
+                x: parseFloat(r[numericCols[0]]),
+                y: parseFloat(r[numericCols[1]])
+            })),
+            backgroundColor: 'rgba(103, 75, 181, 0.6)'
+        }]
+    };
+} else if (dateLikeCol && numericCol) {
+    // A date-like column + a number → line chart (trend over time)
+    chartType = 'line';
+    chartData = {
+        labels: resultRows.map(r => r[dateLikeCol]),
+        datasets: [{
+            label: numericCol,
+            data: resultRows.map(r => parseFloat(r[numericCol])),
+            borderColor: 'rgba(103, 75, 181, 1)',
+            backgroundColor: 'rgba(103, 75, 181, 0.2)',
+            tension: 0.3,
+            fill: true
+        }]
+    };
+} else {
+    // Default: bar chart (category vs number)
+    chartData = {
+        labels: resultRows.map(r => r[labelCol]),
+        datasets: [{
+            label: numericCol,
+            data: resultRows.map(r => parseFloat(r[numericCol])),
+            backgroundColor: 'rgba(103, 75, 181, 0.6)',
+            borderRadius: 8
+        }]
+    };
+}
+
+new Chart(document.getElementById(chartId), {
+    type: chartType,
+    data: chartData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: chartType === 'scatter' } }
+    }
+});
             }
         }
 
@@ -304,6 +368,12 @@
             if (!question) return;
 
             addUserMessage(question);
+            // Checking if the user explicitly asked for a specific chart type
+let requestedChartType = null;
+if (/scatter/i.test(question)) requestedChartType = 'scatter';
+else if (/line (chart|graph|plot)|trend/i.test(question)) requestedChartType = 'line';
+else if (/bar (chart|graph)/i.test(question)) requestedChartType = 'bar';
+else if (/pie (chart|graph)/i.test(question)) requestedChartType = 'pie';
             textarea.value = '';
             textarea.style.height = 'auto';
             startStatusAnimation();
@@ -323,10 +393,10 @@
                 }
 
                 if (data.type === 'root_cause_analysis') {
-                    addAIMessage(data.explanation, data.breakdown?.byRegion || null, false);
-                } else {
-                    addAIMessage(data.explanation, data.result, false);
-                }
+    addAIMessage(data.explanation, data.breakdown?.byRegion || null, false, requestedChartType);
+} else {
+    addAIMessage(data.explanation, data.result, false, requestedChartType);
+}
             } catch (err) {
                 stopStatusAnimation();
                 addAIMessage('Could not reach the server: ' + err.message, null, true);
