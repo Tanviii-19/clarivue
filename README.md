@@ -2,7 +2,14 @@
 
 An AI-powered data analytics tool. Upload an Excel or CSV file, ask questions about it in plain English, and get back an answer with a chart and a table — no SQL needed.
 
+## Demo Video
+<a href="https://www.youtube.com/watch?v=Os5uC45igMc">
+  <img src="https://img.youtube.com/vi/Os5uC45igMc/maxresdefault.jpg" width="500">
+</a>
 
+*Click the thumbnail above to watch a full walkthrough — uploading data, automatic chart selection, root cause analysis, and more.*
+
+▶️ [Watch the full demo on YouTube](https://www.youtube.com/watch?v=Os5uC45igMc)
 
 ## Why I built this
 
