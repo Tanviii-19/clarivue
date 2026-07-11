@@ -66,11 +66,35 @@ function createStageTracker() {
 
 
 async function runRootCauseAnalysis(model, targetTable, columns, userQuestion, callback) {
-  const angles = [
-    `SELECT region, SUM(amount) as total FROM ${targetTable} GROUP BY region ORDER BY total DESC`,
-    `SELECT product_name, SUM(amount) as total FROM ${targetTable} GROUP BY product_name ORDER BY total DESC`,
-    `SELECT sale_date, SUM(amount) as total FROM ${targetTable} GROUP BY sale_date ORDER BY sale_date`
-  ];
+  // Dynamically find the right columns instead of hardcoding names
+  const regionCol = columns.find(c => /region|area|zone|location/i.test(c));
+  const productCol = columns.find(c => /product|item|category/i.test(c));
+  const dateCol = columns.find(c => /date|month|year|time/i.test(c));
+  const amountCol = columns.find(c => /amount|sales|revenue|total|price/i.test(c));
+
+  if (!amountCol) {
+    return callback(new Error('Could not find a numeric amount/sales column to analyze.'), null);
+  }
+
+  const angles = [];
+  const angleLabels = [];
+
+  if (regionCol) {
+    angles.push(`SELECT ${regionCol}, SUM(${amountCol}) as total FROM ${targetTable} GROUP BY ${regionCol} ORDER BY total DESC`);
+    angleLabels.push('byRegion');
+  }
+  if (productCol) {
+    angles.push(`SELECT ${productCol}, SUM(${amountCol}) as total FROM ${targetTable} GROUP BY ${productCol} ORDER BY total DESC`);
+    angleLabels.push('byProduct');
+  }
+  if (dateCol) {
+    angles.push(`SELECT ${dateCol}, SUM(${amountCol}) as total FROM ${targetTable} GROUP BY ${dateCol} ORDER BY ${dateCol}`);
+    angleLabels.push('byDate');
+  }
+
+  if (angles.length === 0) {
+    return callback(new Error('Could not find region, product, or date columns to break down the analysis.'), null);
+  }
 
   const results = [];
   let completed = 0;
@@ -81,24 +105,22 @@ async function runRootCauseAnalysis(model, targetTable, columns, userQuestion, c
       completed++;
 
       if (completed === angles.length) {
-        // Summarize any large results before sending to Gemini (saves tokens/cost)
-        const summarizedRegion = summarizeIfLarge(results[0]);
-        const summarizedProduct = summarizeIfLarge(results[1]);
-        const summarizedDate = summarizeIfLarge(results[2]);
+        const breakdown = {};
+        angleLabels.forEach((label, i) => {
+          breakdown[label] = summarizeIfLarge(results[i]);
+        });
 
-        
         const analysisPrompt = `You are a senior business analyst investigating this question: "${userQuestion}"
 
 Here is data broken down by different angles (large datasets have been summarized to top/bottom 5 to save space):
 
-By Region: ${JSON.stringify(summarizedRegion)}
-By Product: ${JSON.stringify(summarizedProduct)}
-By Date: ${JSON.stringify(summarizedDate)}
+${angleLabels.map((label, i) => `${label}: ${JSON.stringify(breakdown[label])}`).join('\n')}
 
 Based on this data, explain the most likely root cause(s) in 3-4 short sentences, in simple business language. Mention the biggest contributing factor(s) clearly. If the data is insufficient to be certain, say so honestly instead of guessing.`;
+
         model.generateContent(analysisPrompt).then(result => {
           const explanation = result.response.text().trim();
-          callback(null, { explanation, breakdown: { byRegion: results[0], byProduct: results[1], byDate: results[2] } });
+          callback(null, { explanation, breakdown });
         }).catch(err => callback(err, null));
       }
     });
@@ -305,7 +327,7 @@ ${generatedSQL}
 
 Error message: ${err.message}
 
-The table is called "sales" with columns: id, product_name, region, amount, sale_date.
+The table is called "${targetTable}" with columns: ${columns.join(', ')}.
 Fix the query and return ONLY the corrected raw SQL query, no explanation, no markdown formatting, no backticks.`;
 
         try {
