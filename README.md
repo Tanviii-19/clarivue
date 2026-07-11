@@ -2,7 +2,7 @@
 
 An AI-powered data analytics tool. Upload an Excel or CSV file, ask questions about it in plain English, and get back an answer with a chart and a table — no SQL needed.
 
-**Live:** https://clarivue-cyr6.onrender.com
+
 
 ## Why I built this
 
@@ -57,6 +57,3 @@ MySQL database (hosted on Aiven)
 - Basic login, so different people's uploads don't all mix together
 - Live progress updates instead of a single "thinking..." state
 
-## Screenshots
-
-*(add screenshots here)*
