@@ -57,6 +57,3 @@ MySQL database (hosted on Aiven)
 - Basic login, so different people's uploads don't all mix together
 - Live progress updates instead of a single "thinking..." state
 
-## Screenshots
-
-*(add screenshots here)*
