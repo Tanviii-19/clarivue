@@ -2,7 +2,7 @@
 
 An AI-powered data analytics tool. Upload an Excel or CSV file, ask questions about it in plain English, and get back an answer with a chart and a table — no SQL needed.
 
-**Live:** https://clarivue-cyr6.onrender.com
+
 
 ## Why I built this
 
